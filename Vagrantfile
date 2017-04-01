@@ -59,6 +59,17 @@ Vagrant.configure("2") do |config|
 	]
 	config.vm.provision :shell, :path => "puppet/preprovision.sh", :args => preprovision_args
 
+	######################################################################
+	######################################################################
+	# Connectivity issues - BR
+	# https://github.com/Chassis/Chassis/issues/171#issuecomment-216034151
+	config.vm.provider :virtualbox do |vb|
+	    vb.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
+	    vb.customize ["modifyvm", :id, "--natdnsproxy1", "on"]
+	end
+	######################################################################
+	######################################################################
+
 	# Provision our setup with Puppet
 	config.vm.provision :puppet do |puppet|
 		puppet.manifests_path = "puppet/manifests"
